@@ -1,0 +1,22 @@
+{
+  "name": "grid-paint-api",
+  "version": "1.0.0",
+  "description": "API for grid paint",
+  "main": "src/index.js",
+  "scripts": {
+    "api": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eoinoreilly30/grid-paint.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eoinoreilly30/grid-paint/issues"
+  },
+  "homepage": "https://github.com/eoinoreilly30/grid-paint#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
