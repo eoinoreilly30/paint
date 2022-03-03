@@ -1,48 +1,57 @@
 if (module.hot) module.hot.accept()
 
+const DEBUG = false
+
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
 
 // TODO: screen size change listener
 
-// TODO: fix the table at 96x36 blocks, centre in the middle if it doesn't fit
-
-canvas.width  = window.innerWidth;
-canvas.height = window.innerHeight;
-
 let bitmap = []
 let first_array = []
 
-for (let y = 0; y < 36; y += 1) {
-    context.moveTo(0, y*20);
-    context.lineTo(canvas.width, y*20);
+const width = window.innerWidth
+const height = window.innerHeight
+
+canvas.width  = width
+canvas.height = height
+
+const x_dims = 96
+const y_dims = 54
+const x_increment = width / x_dims
+const y_increment = height / y_dims
+
+for (let y = 0; y < y_dims; y++) {
+    if (DEBUG) {
+        context.moveTo(0, y*y_increment);
+        context.lineTo(width, y*y_increment);
+    }
     first_array.push(false)
 }
 
-for (let x = 0; x < 96; x += 1) {
-    context.moveTo(x*20, 0);
-    context.lineTo(x, 96*20);
-    bitmap.push(first_array)
+for (let x = 0; x < x_dims; x++) {
+    if (DEBUG) {
+        context.moveTo(x*x_increment, 0);
+        context.lineTo(x*x_increment, height);
+    }
+    bitmap.push([...first_array])
 }
 
-context.strokeStyle = "lightgrey";
-context.lineWidth = 1
-context.stroke();
+if (DEBUG) {
+    context.strokeStyle = "lightgrey";
+    context.lineWidth = 1
+    context.stroke();
+}
 
 canvas.addEventListener("click", event => {
-    let x = Math.floor(event.clientX / 20)
-    let y = Math.floor(event.clientY / 20)
+    let x = Math.floor(event.clientX / x_increment)
+    let y = Math.floor(event.clientY / y_increment)
 
     if (bitmap[x][y]) {
-        context.clearRect(x*20, y*20, 20, 20)
-
-        context.strokeStyle = "lightgrey";
-        context.lineWidth = 1
-        context.rect(x*20, y*20, 20, 20)
-
         bitmap[x][y] = false
+        context.clearRect(x*x_increment, y*y_increment, x_increment, y_increment)
     } else {
-        context.fillRect(x*20, y*20, 20, 20)
         bitmap[x][y] = true
+        context.fillRect(x*x_increment, y*y_increment, x_increment, y_increment)
     }
 })
