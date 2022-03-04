@@ -29,5 +29,8 @@
     "presets": [
       "@babel/preset-env"
     ]
+  },
+  "dependencies": {
+    "axios": "^0.26.0"
   }
 }

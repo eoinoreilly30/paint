@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/eoinoreilly30/grid-paint#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.3"
   }
 }
