@@ -8,8 +8,8 @@ createGridIfNotExists()
 
 const port = 3000
 const server = createServer({
-        key: readFileSync(process.env.NODE_ENV === "production" ? "/home/eoin/ssl/privkey.pem" : "../devSSL/localhost.key"),
-        cert: readFileSync(process.env.NODE_ENV === "production" ? "/home/eoin/ssl/fullchain.pem" : "../devSSL/localhost.crt"),
+        key: readFileSync(process.env.NODE_ENV === "production" ? "/etc/letsencrypt/live/chatmaps-api.0x30.in/privkey.pem" : "../devSSL/localhost.key"),
+        cert: readFileSync(process.env.NODE_ENV === "production" ? "/etc/letsencrypt/live/chatmaps-api.0x30.in/fullchain.pem" : "../devSSL/localhost.crt"),
     },
     (req, res) => {
         res.writeHead(200);
