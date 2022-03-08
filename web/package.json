@@ -1,7 +1,7 @@
 {
   "name": "grid-paint-web",
   "version": "1.0.0",
-  "description": "Frontend for grip paint",
+  "description": "Frontend for grid paint",
   "main": "src/index.js",
   "scripts": {
     "serve": "webpack serve --config ./webpack.config.js --mode development",

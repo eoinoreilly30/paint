@@ -1,0 +1,8 @@
+[Unit]
+Description=Gridpaint
+
+[Service]
+ExecStart=exec-start.sh
+
+[Install]
+WantedBy=multi-user.target

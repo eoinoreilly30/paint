@@ -16,7 +16,7 @@ const analytics = getAnalytics(app);
 if (module.hot) module.hot.accept()
 
 const PORT = 3000
-const SERVER = process.env.NODE_ENV === "development" ? "localhost" : "chatmaps-api.0x30.in"
+const SERVER = process.env.NODE_ENV === "development" ? "localhost" : "api.0x30.in"
 const socket = new WebSocket(`wss://${SERVER}:${PORT}`);
 
 let canvas = document.getElementById("canvas");
