@@ -8,8 +8,8 @@ createGridIfNotExists()
 
 const port = 3000
 const server = createServer({
-    key: readFileSync(process.env.NODE_ENV === "production" ? "~/ssl/privkey.pem" : "../devSSL/localhost.key"),
-    cert: readFileSync(process.env.NODE_ENV === "production" ? "~/ssl/fullchain.pem" : "../devSSL/localhost.crt"),
+    key: readFileSync(process.env.NODE_ENV === "production" ? "/home/eoin/ssl/privkey.pem" : "../devSSL/localhost.key"),
+    cert: readFileSync(process.env.NODE_ENV === "production" ? "/home/eoin/ssl/fullchain.pem" : "../devSSL/localhost.crt"),
 });
 const wss = new WebSocketServer({server});
 
