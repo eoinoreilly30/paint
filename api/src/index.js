@@ -1,48 +1,42 @@
-const express = require('express')
-const fs = require('fs')
-const cors = require('cors')
-const bodyParser = require('body-parser');
-
-const app = express()
-const port = 3000
-
-app.use(cors())
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+import {WebSocketServer, WebSocket} from 'ws';
+import {readFileSync, writeFileSync, existsSync} from 'fs'
 
 createGridIfNotExists()
 
-app.get('/', (req, res) => {
-    res.send('This is the API for Grid Paint')
-})
+// TODO: detect broken connections
 
-app.get('/grid', (req, res) => {
+const port = 3000
+const wss = new WebSocketServer({port: port});
+
+wss.on('connection', ws => {
+    ws.on('message', data => {
+        try {
+            data = JSON.parse(data)
+            let grid = JSON.parse(readFileSync('grid.txt', 'utf8'))
+            grid[data.x][data.y] = data.value
+            writeFileSync('grid.txt', JSON.stringify(grid), 'utf8')
+
+            wss.clients.forEach(client => {
+                if (client !== ws && client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({type: "update", data: data}));
+                }
+            });
+        } catch (err) {
+            console.error(err)
+        }
+    });
+
     try {
-        const grid = JSON.parse(fs.readFileSync('grid.txt', 'utf8'))
-        res.send(grid)
+        const grid = JSON.parse(readFileSync('grid.txt', 'utf8'))
+        ws.send(JSON.stringify({type: "init", data: grid}));
     } catch (err) {
         console.error(err)
     }
-})
-
-app.post('/grid', (req, res) => {
-    try {
-        let grid = JSON.parse(fs.readFileSync('grid.txt', 'utf8'))
-        grid[req.body.x][req.body.y] = !grid[req.body.x][req.body.y]
-        fs.writeFileSync('grid.txt', JSON.stringify(grid), 'utf8')
-        res.status(201).end()
-    } catch (err) {
-        console.error(err)
-    }
-})
-
-app.listen(port, () => {
-    console.log(`Started on port ${port}`)
-})
+});
 
 function createGridIfNotExists() {
     try {
-        if (!fs.existsSync('grid.txt')) {
+        if (!existsSync('grid.txt')) {
             let grid = []
             let first_array = []
             const [x_dims, y_dims] = [96, 54] // 96x54
@@ -56,7 +50,7 @@ function createGridIfNotExists() {
             }
 
             try {
-                fs.writeFileSync('grid.txt', JSON.stringify(grid), 'utf8')
+                writeFileSync('grid.txt', JSON.stringify(grid), 'utf8')
             } catch (err) {
                 console.error(err)
             }

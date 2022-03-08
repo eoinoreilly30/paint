@@ -4,7 +4,9 @@
   "description": "Frontend for grip paint",
   "main": "src/index.js",
   "scripts": {
-    "serve": "webpack serve --config ./webpack.config.js --mode development"
+    "serve": "webpack serve --config ./webpack.config.js --mode development",
+    "build": "webpack --config ./webpack.config.js --mode production",
+    "deploy": "npm run build && firebase deploy"
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,6 @@
     ]
   },
   "dependencies": {
-    "axios": "^0.26.0"
+    "firebase": "^9.6.8"
   }
 }

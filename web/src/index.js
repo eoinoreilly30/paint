@@ -1,9 +1,23 @@
-const axios = require('axios');
+import {getAnalytics} from "firebase/analytics";
+import {initializeApp} from "firebase/app"
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDGpTKnFjLJOM1n2_eY6AgBLY1nmDkq8ho",
+    authDomain: "grid-paint-e3dbf.firebaseapp.com",
+    projectId: "grid-paint-e3dbf",
+    storageBucket: "grid-paint-e3dbf.appspot.com",
+    messagingSenderId: "861793848325",
+    appId: "1:861793848325:web:966094687dffbbd003606c",
+    measurementId: "G-1FS1MRB4S0"
+};
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 if (module.hot) module.hot.accept()
 
-const DEBUG = false
-const BASE_URL = "http://localhost:3000"
+const PORT = 3000
+const SERVER = process.env.NODE_ENV === "development" ? "localhost" : "grid-paint-api.0x30.in"
+const socket = new WebSocket(`ws://${SERVER}:${PORT}`);
 
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
@@ -22,8 +36,10 @@ let y_dims = 0
 let x_increment = 0
 let y_increment = 0
 
-axios.get(BASE_URL + '/grid')
-    .then(({data}) => {
+socket.addEventListener('message', event => {
+    const {type, data} = JSON.parse(event.data)
+
+    if (type === "init") {
         grid = data
         x_dims = grid.length
         y_dims = grid[0].length
@@ -37,19 +53,26 @@ axios.get(BASE_URL + '/grid')
             if (grid[x][y]) {
                 grid[x][y] = false
                 context.clearRect(x * x_increment, y * y_increment, x_increment, y_increment)
-                updateBitmap(x, y)
+                socket.send(JSON.stringify({x: x, y: y, value: false}))
             } else {
                 grid[x][y] = true
                 context.fillRect(x * x_increment, y * y_increment, x_increment, y_increment)
-                updateBitmap(x, y)
+                socket.send(JSON.stringify({x: x, y: y, value: true}))
             }
         })
 
         drawGrid()
-    })
-    .catch((error) => {
-        console.log(error);
-    })
+    } else if (type === "update") {
+        const {x, y, value} = data
+        if (value) {
+            grid[x][y] = true
+            context.fillRect(x * x_increment, y * y_increment, x_increment, y_increment)
+        } else {
+            grid[x][y] = false
+            context.clearRect(x * x_increment, y * y_increment, x_increment, y_increment)
+        }
+    }
+});
 
 function drawGrid() {
     for (let x = 0; x < grid.length; x++) {
@@ -59,27 +82,4 @@ function drawGrid() {
             }
         }
     }
-
-    if (DEBUG) {
-        for (let y = 0; y < y_dims; y++) {
-            context.moveTo(0, y * y_increment);
-            context.lineTo(width, y * y_increment);
-        }
-
-        for (let x = 0; x < x_dims; x++) {
-            context.moveTo(x * x_increment, 0);
-            context.lineTo(x * x_increment, height);
-        }
-
-        context.strokeStyle = "lightgrey";
-        context.lineWidth = 1
-        context.stroke();
-    }
-}
-
-function updateBitmap(x, y) {
-    axios.post(BASE_URL + '/grid', {x: x, y: y})
-        .catch(err => {
-            console.log(err);
-        })
 }
