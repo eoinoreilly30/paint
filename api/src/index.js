@@ -1,3 +1,4 @@
+import {createServer} from 'https';
 import {WebSocketServer, WebSocket} from 'ws';
 import {readFileSync, writeFileSync, existsSync} from 'fs'
 
@@ -6,7 +7,13 @@ createGridIfNotExists()
 // TODO: detect broken connections
 
 const port = 3000
-const wss = new WebSocketServer({port: port});
+const server = createServer({
+    key: readFileSync(process.env.NODE_ENV === "production" ? "~/ssl/privkey.pem" : "../devSSL/localhost.key"),
+    cert: readFileSync(process.env.NODE_ENV === "production" ? "~/ssl/fullchain.pem" : "../devSSL/localhost.crt"),
+});
+const wss = new WebSocketServer({server});
+
+server.listen(port)
 
 wss.on('connection', ws => {
     ws.on('message', data => {

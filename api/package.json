@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "api": "nodemon src/index.js"
+    "dev-api": "nodemon src/index.js",
+    "production-api": "NODE_ENV=production node src/index.js"
   },
   "repository": {
     "type": "git",
