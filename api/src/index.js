@@ -8,12 +8,12 @@ createGridIfNotExists()
 
 const port = 3000
 const server = createServer({
-        key: readFileSync(process.env.NODE_ENV === "production" ? "ssl/privkey.pem" : "../devSSL/localhost.key"),
-        cert: readFileSync(process.env.NODE_ENV === "production" ? "ssl/fullchain.pem" : "../devSSL/localhost.crt"),
+        key: readFileSync("ssl/privkey.pem"),
+        cert: readFileSync("ssl/fullchain.pem"),
     },
     (req, res) => {
         res.writeHead(200);
-        res.end('hello world\n');
+        res.end('This is the Grid Paint API');
     });
 const wss = new WebSocketServer({server});
 

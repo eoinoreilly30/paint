@@ -1,5 +1,7 @@
 .idea
 api/grid.txt
+api/ssl/
+web/ssl/
 
 # Logs
 logs

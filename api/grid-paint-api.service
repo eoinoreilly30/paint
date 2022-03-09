@@ -2,7 +2,7 @@
 Description=Gridpaint
 
 [Service]
-ExecStart=exec-start.sh
+ExecStart=/home/eoin/grid-paint/api/exec-start.sh
 
 [Install]
 WantedBy=multi-user.target

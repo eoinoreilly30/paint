@@ -21,8 +21,8 @@ module.exports = {
     },
     devServer: {
         https: {
-            key: fs.readFileSync("../devSSL/localhost.key"),
-            cert: fs.readFileSync("../devSSL/localhost.crt")
+            key: fs.readFileSync("ssl/privkey.pem"),
+            cert: fs.readFileSync("ssl/fullchain.pem")
         },
         static: path.resolve(__dirname, './dist'),
         open: true
