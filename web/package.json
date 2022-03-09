@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "serve": "webpack serve --config ./webpack.config.js --mode development",
-    "build": "webpack --config ./webpack.config.js --mode production",
+    "tailwind": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify",
+    "tailwind-watch": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify --watch",
+    "build": "npm run tailwind && webpack --config ./webpack.config.js --mode production",
     "deploy": "npm run build && firebase deploy"
   },
   "repository": {
@@ -22,6 +24,7 @@
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",
     "babel-loader": "^8.2.3",
+    "copy-webpack-plugin": "^10.2.4",
     "tailwindcss": "^3.0.23",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2",

@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require("fs");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     entry: path.resolve(__dirname, './src/index.js'),
@@ -25,6 +26,13 @@ module.exports = {
             cert: fs.readFileSync("ssl/fullchain.pem")
         },
         static: path.resolve(__dirname, './dist'),
-        open: true
-    }
+        open: true,
+    },
+    plugins: [
+        new CopyPlugin({
+            patterns: [
+                { from: "./static" },
+            ],
+        }),
+    ],
 };

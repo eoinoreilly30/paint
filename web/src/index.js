@@ -1,6 +1,8 @@
 import {getAnalytics} from "firebase/analytics";
 import {initializeApp} from "firebase/app"
 
+// TODO: online users
+
 const firebaseConfig = {
     apiKey: "AIzaSyDGpTKnFjLJOM1n2_eY6AgBLY1nmDkq8ho",
     authDomain: "grid-paint-e3dbf.firebaseapp.com",
@@ -22,10 +24,20 @@ const socket = new WebSocket(`wss://${SERVER}:${PORT}`);
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
 
-// TODO: screen size change listener
-
 const width = window.innerWidth
 const height = window.innerHeight
+
+if (width < height) {
+    document.getElementById("rotate-message").style.display = "block"
+    setTimeout(() => {
+        document.getElementById("rotate-message").style.display = "none"
+    }, 3000)
+}
+
+// TODO: screen size change listener
+window.addEventListener('resize', () => {
+
+})
 
 canvas.width = width
 canvas.height = height
@@ -62,6 +74,7 @@ socket.addEventListener('message', event => {
         })
 
         drawGrid()
+
     } else if (type === "update") {
         const {x, y, value} = data
         if (value) {
@@ -75,8 +88,8 @@ socket.addEventListener('message', event => {
 });
 
 function drawGrid() {
-    for (let x = 0; x < grid.length; x++) {
-        for (let y = 0; y < grid[0].length; y++) {
+    for (let x = 0; x < x_dims; x++) {
+        for (let y = 0; y < y_dims; y++) {
             if (grid[x][y]) {
                 context.fillRect(x * x_increment, y * y_increment, x_increment, y_increment)
             }

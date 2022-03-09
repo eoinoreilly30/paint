@@ -1,6 +1,8 @@
 FROM node:14.15.0
 
-COPY . .
+COPY src src
+COPY package.json package.json
+RUN mkdir ssl
 
 RUN npm install
 
