@@ -2,7 +2,13 @@
 Description=Gridpaint
 
 [Service]
-ExecStart=/home/eoin/grid-paint/api/exec-start.sh
+ExecStartPre=/usr/bin/cp /etc/letsencrypt/live/api.0x30.in/privkey.pem /etc/letsencrypt/live/api.0x30.in/fullchain.pem /var/lib/api-ssl
+ExecStart=/usr/bin/docker run --name grid-paint -p 3000:3000 eoinoreilly30/grid-paint:latest
+ExecStop=/usr/bin/docker stop grid-paint
+ExecStopPost=/usr/bin/docker rm grid-paint
+
+Restart=on-failure
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
