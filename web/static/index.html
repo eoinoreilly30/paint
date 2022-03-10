@@ -14,12 +14,29 @@
     <link href="/output.css" rel="stylesheet">
 </head>
 <body>
-<div id="rotate-message" class="slide-in-top hidden text-center">
-    <div class="absolute z-50 left-1/2 top-10 -translate-x-1/2 bg-cyan-100 px-3 py-1 rounded-lg">
-        <div class="text-lg font-normal">Works better in landscape</div>
+<div class="relative">
+    <div id="rotate-message" class="slide-in-top hidden text-center absolute z-50 top-10 left-1/2">
+        <div class="-translate-x-1/2 bg-cyan-100 px-3 py-1 rounded-lg drop-shadow-xl">
+            <div class="text-lg font-normal">Works better in landscape</div>
+        </div>
     </div>
+    <div class="text-center absolute z-50 top-0 right-0 drop-shadow-xl bg-white pt-1 pr-4 pl-2 pb-1 flex flex-row items-center">
+        <div id="active-users-on" class="pr-2 hidden">
+            <svg style="width: 15px;height: 15px" viewBox="0 0 24 24">
+                <path fill="lawngreen"
+                      d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
+            </svg>
+        </div>
+        <div id="active-users-off" class="pr-2">
+            <svg style="width: 15px;height: 15px" viewBox="0 0 24 24">
+                <path fill="grey"
+                      d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
+            </svg>
+        </div>
+        <div id="active-users" class="text-lg font-normal"></div>
+    </div>
+    <canvas id="canvas" class="absolute" width="100%" height="100%"></canvas>
 </div>
-<canvas id="canvas" style="height: 100%; width: 100%; position: absolute;"></canvas>
 <script src="/bundle.js"></script>
 </body>
 </html>

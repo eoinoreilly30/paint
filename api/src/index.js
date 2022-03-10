@@ -43,6 +43,12 @@ wss.on('connection', ws => {
     } catch (err) {
         console.error(err)
     }
+
+    wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({type: "active_users", data: wss.clients.size}));
+        }
+    });
 });
 
 function createGridIfNotExists() {
@@ -50,7 +56,7 @@ function createGridIfNotExists() {
         if (!existsSync('grid.txt')) {
             let grid = []
             let first_array = []
-            const [x_dims, y_dims] = [4, 2] // 96x54
+            const [x_dims, y_dims] = [96, 54] // 96x54
 
             for (let y = 0; y < y_dims; y++) {
                 first_array.push(false)

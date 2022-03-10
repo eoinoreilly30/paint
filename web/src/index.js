@@ -26,6 +26,8 @@ let context = canvas.getContext("2d");
 
 const width = window.innerWidth
 const height = window.innerHeight
+canvas.width = width
+canvas.height = height
 
 if (width < height) {
     document.getElementById("rotate-message").style.display = "block"
@@ -34,17 +36,15 @@ if (width < height) {
     }, 3000)
 }
 
-// TODO: screen size change listener
 window.addEventListener('resize', () => {
-
+    location.reload()
 })
 
-canvas.width = width
-canvas.height = height
+window.onbeforeunload = () => {
+    socket.close()
+}
 
 let grid = []
-let x_dims = 0
-let y_dims = 0
 let x_increment = 0
 let y_increment = 0
 
@@ -53,10 +53,8 @@ socket.addEventListener('message', event => {
 
     if (type === "init") {
         grid = data
-        x_dims = grid.length
-        y_dims = grid[0].length
-        x_increment = width / x_dims
-        y_increment = height / y_dims
+        x_increment = width / grid.length
+        y_increment = height / grid[0].length
 
         canvas.addEventListener("click", event => {
             let x = Math.floor(event.clientX / x_increment)
@@ -73,7 +71,13 @@ socket.addEventListener('message', event => {
             }
         })
 
-        drawGrid()
+        for (let x = 0; x < grid.length; x++) {
+            for (let y = 0; y < grid[0].length; y++) {
+                if (grid[x][y]) {
+                    context.fillRect(x * x_increment, y * y_increment, x_increment, y_increment)
+                }
+            }
+        }
 
     } else if (type === "update") {
         const {x, y, value} = data
@@ -84,15 +88,14 @@ socket.addEventListener('message', event => {
             grid[x][y] = false
             context.clearRect(x * x_increment, y * y_increment, x_increment, y_increment)
         }
+    } else if (type === "active_users") {
+        if (data - 1 > 0) {
+            document.getElementById("active-users-on").style.display = "block"
+            document.getElementById("active-users-off").style.display = "none"
+        } else {
+            document.getElementById("active-users-on").style.display = "none"
+            document.getElementById("active-users-off").style.display = "block"
+        }
+        document.getElementById("active-users").innerText = `${data - 1} other active ${data === 2 ? 'user' : 'users'}`
     }
 });
-
-function drawGrid() {
-    for (let x = 0; x < x_dims; x++) {
-        for (let y = 0; y < y_dims; y++) {
-            if (grid[x][y]) {
-                context.fillRect(x * x_increment, y * y_increment, x_increment, y_increment)
-            }
-        }
-    }
-}
