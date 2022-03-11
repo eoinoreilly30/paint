@@ -15,12 +15,7 @@
 </head>
 <body>
 <div class="relative">
-    <div id="rotate-message" class="slide-in-top hidden text-center absolute z-50 top-10 left-1/2">
-        <div class="-translate-x-1/2 bg-cyan-100 px-3 py-1 rounded-lg drop-shadow-xl">
-            <div class="text-lg font-normal">Works better in landscape</div>
-        </div>
-    </div>
-    <div class="text-center absolute z-50 top-0 right-0 drop-shadow-xl bg-white pt-1 pr-4 pl-2 pb-1 flex flex-row items-center">
+    <div id="active-users" class="text-center absolute z-10 top-0 right-0 drop-shadow-xl bg-white pt-1 pr-4 pl-2 pb-1 flex flex-row items-center">
         <div id="active-users-on" class="pr-2 hidden">
             <svg style="width: 15px;height: 15px" viewBox="0 0 24 24">
                 <path fill="lawngreen"
@@ -33,7 +28,10 @@
                       d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
             </svg>
         </div>
-        <div id="active-users" class="text-lg font-normal"></div>
+        <div id="active-users-text" class="text-lg font-normal">0 other users</div>
+    </div>
+    <div id="api-error" class="text-center absolute z-20 top-0 right-0 drop-shadow-xl bg-red-500 pt-1 pr-4 pl-2 pb-1 hidden">
+        <div class="text-lg font-normal text-white font-bold">Error connecting to API</div>
     </div>
     <canvas id="canvas" class="absolute" width="100%" height="100%"></canvas>
 </div>

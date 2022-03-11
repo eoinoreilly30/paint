@@ -5,7 +5,10 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "api": "nodemon src/index.js"
+    "api": "nodemon src/index.js",
+    "build": "docker build -t eoinoreilly30/grid-paint:latest -f docker/Dockerfile .",
+    "push": "docker push eoinoreilly30/grid-paint:latest",
+    "build+push": "npm run build && npm run push"
   },
   "repository": {
     "type": "git",
