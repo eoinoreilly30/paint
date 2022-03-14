@@ -1,8 +1,8 @@
 import {createServer} from 'https';
-import {WebSocketServer, WebSocket} from 'ws';
+import {WebSocket, WebSocketServer} from 'ws';
 import {readFileSync} from 'fs'
 
-let grid = createGrid()
+let canvas = ""
 
 const port = 3000
 const server = createServer({
@@ -24,10 +24,18 @@ wss.on('connection', ws => {
         const {type, data} = JSON.parse(message)
 
         if (type === "update") {
-            grid[data.x][data.y] = data.value
+            canvas = data
             wss.clients.forEach(client => {
                 if (client !== ws && client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify({type: "update", data: data}));
+                }
+            });
+
+        } else if (type === "clear") {
+            canvas = ""
+            wss.clients.forEach(client => {
+                if (client !== ws && client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({type: "clear"}));
                 }
             });
         } else if (type === "pong") {
@@ -35,7 +43,7 @@ wss.on('connection', ws => {
         }
     });
 
-    ws.send(JSON.stringify({type: "init", data: grid}));
+    ws.send(JSON.stringify({type: "init", data: canvas}));
 
     wss.clients.forEach(ws => {
         if (ws.readyState === WebSocket.OPEN) {
@@ -64,19 +72,3 @@ const interval = setInterval(() => {
 wss.on('close', () => {
     clearInterval(interval);
 });
-
-function createGrid() {
-    let grid = []
-    let first_array = []
-    const [x_dims, y_dims] = [96, 54] // 96x54
-
-    for (let y = 0; y < y_dims; y++) {
-        first_array.push(false)
-    }
-
-    for (let x = 0; x < x_dims; x++) {
-        grid.push([...first_array])
-    }
-
-    return grid
-}

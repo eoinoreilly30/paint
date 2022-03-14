@@ -57,50 +57,58 @@ window.addEventListener('resize', () => {
     location.reload()
 })
 
-let grid = []
-let x_increment = 0
-let y_increment = 0
+let coord = {x: 0, y: 0}
+
+canvas.addEventListener("mousedown", event => {
+    canvas.addEventListener('mousemove', draw);
+    reposition(event)
+});
+canvas.addEventListener("mouseup", () => {
+    canvas.removeEventListener('mousemove', draw);
+    socket.send(JSON.stringify({type: "update", data: canvas.toDataURL("image/webp", 1)}))
+});
+
+canvas.addEventListener("touchstart", event => {
+    console.log(event);
+    canvas.addEventListener('touchmove', draw);
+    reposition(event)
+});
+canvas.addEventListener("touchend", () => {
+    canvas.removeEventListener('touchmove', draw);
+    socket.send(JSON.stringify({type: "update", data: canvas.toDataURL("image/webp", 1)}))
+});
+
+function draw(event) {
+    context.beginPath();
+    context.lineWidth = 5;
+    context.lineCap = 'round';
+    context.strokeStyle = '#ACD3ED';
+    context.moveTo(coord.x, coord.y);
+    reposition(event);
+    context.lineTo(coord.x, coord.y);
+    context.stroke();
+}
+
+function reposition(event) {
+    let clientX = event.type === "touchmove" || event.type === "touchstart" ? event.touches[0].clientX : event.clientX
+    let clientY = event.type === "touchmove" || event.type === "touchstart" ? event.touches[0].clientY : event.clientY
+    coord.x = clientX - canvas.offsetLeft;
+    coord.y = clientY - canvas.offsetTop;
+}
 
 socket.addEventListener("message", event => {
     const {type, data} = JSON.parse(event.data)
 
-    if (type === "init") {
-        grid = data
-        x_increment = width / grid.length
-        y_increment = height / grid[0].length
+    if (type === "init" || type === "update") {
+        let image = new Image();
+        image.onload = () => {
+            context.drawImage(image, 0, 0, width, height);
+        };
+        image.src = data;
 
-        canvas.addEventListener("click", event => {
-            let x = Math.floor(event.clientX / x_increment)
-            let y = Math.floor(event.clientY / y_increment)
+    } else if (type === "clear") {
+        context.clearRect(0, 0, width, height)
 
-            if (grid[x][y]) {
-                grid[x][y] = false
-                context.clearRect(x * x_increment, y * y_increment, x_increment, y_increment)
-                socket.send(JSON.stringify({type: "update", data: {x: x, y: y, value: false}}))
-            } else {
-                grid[x][y] = true
-                context.fillRect(x * x_increment, y * y_increment, x_increment, y_increment)
-                socket.send(JSON.stringify({type: "update", data: {x: x, y: y, value: true}}))
-            }
-        })
-
-        for (let x = 0; x < grid.length; x++) {
-            for (let y = 0; y < grid[0].length; y++) {
-                if (grid[x][y]) {
-                    context.fillRect(x * x_increment, y * y_increment, x_increment, y_increment)
-                }
-            }
-        }
-
-    } else if (type === "update") {
-        const {x, y, value} = data
-        if (value) {
-            grid[x][y] = true
-            context.fillRect(x * x_increment, y * y_increment, x_increment, y_increment)
-        } else {
-            grid[x][y] = false
-            context.clearRect(x * x_increment, y * y_increment, x_increment, y_increment)
-        }
     } else if (type === "active_users") {
         if (data > 1) {
             document.getElementById("active-users-on").style.display = "block"
@@ -116,3 +124,8 @@ socket.addEventListener("message", event => {
         socket.send(JSON.stringify({type: "pong"}))
     }
 });
+
+document.getElementById("clear-button").addEventListener("click", () => {
+    context.clearRect(0, 0, width, height)
+    socket.send(JSON.stringify({type: "clear"}))
+})
