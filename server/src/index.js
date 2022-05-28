@@ -1,19 +1,19 @@
-import {createServer} from 'https';
-import {WebSocket, WebSocketServer} from 'ws';
-import {readFileSync} from 'fs'
+import { createServer } from 'https';
+import { WebSocket, WebSocketServer } from 'ws';
+import { readFileSync } from 'fs'
 
 let canvas = ""
 
 const port = 3000
 const server = createServer({
-        key: readFileSync("ssl/privkey.pem"),
-        cert: readFileSync("ssl/fullchain.pem"),
-    },
+    key: readFileSync("/home/eoin/ssl/privkey.pem"),
+    cert: readFileSync("/home/eoin/ssl/fullchain.pem"),
+},
     (req, res) => {
         res.writeHead(200);
         res.end('This is the Grid Paint API');
     });
-const wss = new WebSocketServer({server});
+const wss = new WebSocketServer({ server });
 
 server.listen(port)
 
@@ -21,13 +21,13 @@ wss.on('connection', ws => {
     ws.isAlive = true;
 
     ws.on('message', message => {
-        const {type, data} = JSON.parse(message)
+        const { type, data } = JSON.parse(message)
 
         if (type === "update") {
             canvas = data
             wss.clients.forEach(client => {
                 if (client !== ws && client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({type: "update", data: data}));
+                    client.send(JSON.stringify({ type: "update", data: data }));
                 }
             });
 
@@ -35,7 +35,7 @@ wss.on('connection', ws => {
             canvas = ""
             wss.clients.forEach(client => {
                 if (client !== ws && client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({type: "clear"}));
+                    client.send(JSON.stringify({ type: "clear" }));
                 }
             });
         } else if (type === "pong") {
@@ -43,11 +43,11 @@ wss.on('connection', ws => {
         }
     });
 
-    ws.send(JSON.stringify({type: "init", data: canvas}));
+    ws.send(JSON.stringify({ type: "init", data: canvas }));
 
     wss.clients.forEach(ws => {
         if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({type: "active_users", data: wss.clients.size}));
+            ws.send(JSON.stringify({ type: "active_users", data: wss.clients.size }));
         }
     });
 });
@@ -59,12 +59,12 @@ const interval = setInterval(() => {
             return
         }
         ws.isAlive = false;
-        ws.send(JSON.stringify({type: "ping"}));
+        ws.send(JSON.stringify({ type: "ping" }));
     });
 
     wss.clients.forEach(ws => {
         if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({type: "active_users", data: wss.clients.size}));
+            ws.send(JSON.stringify({ type: "active_users", data: wss.clients.size }));
         }
     });
 }, 4000);

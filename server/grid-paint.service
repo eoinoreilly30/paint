@@ -1,0 +1,13 @@
+[Unit]
+Description=Gridpaint
+
+[Service]
+ExecStartPre=/usr/bin/cp /etc/letsencrypt/live/api.0x30.in/privkey.pem /etc/letsencrypt/live/api.0x30.in/fullchain.pem /home/eoin/ssl
+ExecStartPre=/usr/bin/chown -R eoin:eoin /home/eoin/ssl
+ExecStart=/home/eoin/.nvm/versions/node/v16.15.0/bin/node /home/eoin/grid-paint/src/index.js
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
