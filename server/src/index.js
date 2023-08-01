@@ -6,16 +6,17 @@ let canvas = ""
 
 const port = 3000
 const server = createServer({
-    key: readFileSync("/home/eoin/ssl/privkey.pem"),
-    cert: readFileSync("/home/eoin/ssl/fullchain.pem"),
+    // key: readFileSync("/home/eoin/ssl/privkey.pem"),
+    // cert: readFileSync("/home/eoin/ssl/fullchain.pem"),
 },
     (req, res) => {
         res.writeHead(200);
-        res.end('This is the Grid Paint API');
+        res.end('This is the Paint API');
     });
 const wss = new WebSocketServer({ server });
 
 server.listen(port)
+console.log(`Server started! Listening on port ${port}`)
 
 wss.on('connection', ws => {
     ws.isAlive = true;

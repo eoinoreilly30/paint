@@ -2,14 +2,14 @@ import {getAnalytics} from "firebase/analytics";
 import {initializeApp} from "firebase/app"
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDGpTKnFjLJOM1n2_eY6AgBLY1nmDkq8ho",
-    authDomain: "grid-paint-e3dbf.firebaseapp.com",
-    projectId: "grid-paint-e3dbf",
-    storageBucket: "grid-paint-e3dbf.appspot.com",
-    messagingSenderId: "861793848325",
-    appId: "1:861793848325:web:966094687dffbbd003606c",
-    measurementId: "G-1FS1MRB4S0"
-};
+    apiKey: "AIzaSyAMnUKklg2ofkmZwFeRLb-pJ5wY2vbstA8",
+    authDomain: "paint-eab6a.firebaseapp.com",
+    projectId: "paint-eab6a",
+    storageBucket: "paint-eab6a.appspot.com",
+    messagingSenderId: "163173252961",
+    appId: "1:163173252961:web:aac45d6b3f112401344f20",
+    measurementId: "G-VK02Q2RWQJ"
+};  
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 

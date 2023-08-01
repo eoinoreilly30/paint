@@ -1,7 +1,7 @@
 {
-  "name": "grid-paint-web",
+  "name": "paint-web",
   "version": "1.0.0",
-  "description": "Frontend for grid paint",
+  "description": "Frontend for paint",
   "main": "src/index.js",
   "scripts": {
     "serve": "webpack serve --config ./webpack.config.js --mode development",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eoinoreilly30/grid-paint.git"
+    "url": "git+https://github.com/eoinoreilly30/paint.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/eoinoreilly30/grid-paint/issues"
+    "url": "https://github.com/eoinoreilly30/paint/issues"
   },
-  "homepage": "https://github.com/eoinoreilly30/grid-paint#readme",
+  "homepage": "https://github.com/eoinoreilly30/paint#readme",
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",

@@ -1,12 +1,12 @@
 {
-  "name": "grid-paint-api",
+  "name": "paint-api",
   "version": "1.0.0",
-  "description": "API for grid paint",
+  "description": "API for paint",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/index.js",
-    "push": "ssh eoin@api.0x30.in rm -rf grid-paint && rsync -a -e ssh --exclude='node_modules/' . eoin@api.0x30.in:~/grid-paint"
+    "start": "node src/index.js",
+    "push": "ssh eoin@api.0x30.in rm -rf paint && rsync -a -e ssh --exclude='node_modules/' . eoin@api.0x30.in:~/paint"
   },
   "dependencies": {
     "ws": "^8.5.0"

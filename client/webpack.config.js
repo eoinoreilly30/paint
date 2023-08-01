@@ -20,14 +20,14 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         filename: 'bundle.js',
     },
-    devServer: {
-        https: {
-            key: fs.readFileSync("ssl/privkey.pem"),
-            cert: fs.readFileSync("ssl/fullchain.pem")
-        },
-        static: path.resolve(__dirname, './dist'),
-        open: true,
-    },
+    // devServer: {
+    //     https: {
+    //         key: fs.readFileSync("ssl/privkey.pem"),
+    //         cert: fs.readFileSync("ssl/fullchain.pem")
+    //     },
+    //     static: path.resolve(__dirname, './dist'),
+    //     open: true,
+    // },
     plugins: [
         new CopyPlugin({
             patterns: [
