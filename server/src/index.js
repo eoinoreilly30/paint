@@ -18,10 +18,13 @@ console.log(`Server started! Listening on port ${port}`)
 wss.on('connection', ws => {
     ws.isAlive = true;
 
+    console.log('Client connected');
+
     ws.on('message', message => {
         const { type, data } = JSON.parse(message)
 
         if (type === "update") {
+            console.log('Brushstroke received');
             canvas = data
             wss.clients.forEach(client => {
                 if (client !== ws && client.readyState === WebSocket.OPEN) {
@@ -30,12 +33,14 @@ wss.on('connection', ws => {
             });
 
         } else if (type === "clear") {
+            console.log('Clearing canvas...');
             canvas = ""
             wss.clients.forEach(client => {
                 if (client !== ws && client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify({ type: "clear" }));
                 }
             });
+            console.log('Canvas cleared');
         } else if (type === "pong") {
             ws.isAlive = true
         }
@@ -65,8 +70,9 @@ const interval = setInterval(() => {
             ws.send(JSON.stringify({ type: "active_users", data: wss.clients.size }));
         }
     });
-}, 4000);
+}, 3000);
 
 wss.on('close', () => {
+    console.log('Client disconnected');
     clearInterval(interval);
 });

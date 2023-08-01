@@ -15,8 +15,8 @@ const analytics = getAnalytics(app);
 
 if (module.hot) module.hot.accept()
 
-const PORT = 3000
-const SERVER = process.env.NODE_ENV === "development" ? "localhost" : "api.0x30.in"
+const PORT = 443
+const SERVER = process.env.NODE_ENV === "development" ? "localhost" : "paint.app.0x30.in"
 let socket = new WebSocket(`wss://${SERVER}:${PORT}`);
 
 socket.addEventListener("error", () => {
