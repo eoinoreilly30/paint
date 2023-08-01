@@ -4,7 +4,7 @@ import { readFileSync } from 'fs'
 
 let canvas = ""
 
-const port = 3000
+const port = 80
 const server = createServer({
     // key: readFileSync("/home/eoin/ssl/privkey.pem"),
     // cert: readFileSync("/home/eoin/ssl/fullchain.pem"),
