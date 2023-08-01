@@ -1,5 +1,3 @@
 # Grid Paint
-A website for everyone to interact with a grid of colours
-
-### Development
-Include ssl certs
+A webapp to draw on a blank canvas.  
+Uses websockets to communicate brushstrokes to clients in realtime.
