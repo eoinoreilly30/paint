@@ -1,3 +1,3 @@
-# Grid Paint
-A webapp to draw on a blank canvas.  
+# Paint
+A realtime drawing canvas.  
 Uses websockets to communicate brushstrokes to clients in realtime.
