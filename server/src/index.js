@@ -1,10 +1,10 @@
-import { createServer } from 'https';
+import { createServer } from 'http';
 import { WebSocket, WebSocketServer } from 'ws';
 import { readFileSync } from 'fs'
 
 let canvas = ""
 
-const port = 443
+const port = 3000
 const server = createServer({
     // key: readFileSync("/home/eoin/ssl/privkey.pem"),
     // cert: readFileSync("/home/eoin/ssl/fullchain.pem"),
